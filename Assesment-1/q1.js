@@ -1,55 +1,49 @@
 const EventEmitter = require('events');
 
-class SessionManager extends EventEmitter {
-    constructor() {
-        super();
+const session = new EventEmitter();
 
-        // greet event
-        this.on('greet', (username) => {
-            console.log(`Hello, ${username}! Welcome.`);
-        });
+// greet event
+session.on('greet', (username) => {
+    console.log(`Hello, ${username}! Welcome.`);
+});
 
-        // exit event
-        this.on('exit', (code) => {
-            console.log(`Session closed with code ${code}. Goodbye!`);
-        });
+// exit event
+session.on('exit', (code) => {
+    console.log(`Session closed with code ${code}. Goodbye!`);
+});
 
-        // once listener for first login
-        this.once('greet', () => {
-            console.log('First login of the day!');
-        });
+// First login - only once
+session.once('greet', () => {
+    console.log('First login of the day!');
+});
 
-        // error listener
-        this.on('error', (message) => {
-            console.log(`Error: ${message}`);
-        });
-    }
+// error event
+session.on('error', (message) => {
+    console.log(`Error: ${message}`);
+});
 
-    trigger(command, ...args) {
-        if (command === 'greet' || command === 'exit') {
-            this.emit(command, ...args);
-        } else {
-            console.log(`Unknown event: ${command}`);
-        }
+// trigger function
+function trigger(command, ...args) {
+    if (command === 'greet' || command === 'exit') {
+        session.emit(command, ...args);
+    } else {
+        console.log(`Unknown event: ${command}`);
     }
 }
 
-// Create object
-const session = new SessionManager();
+// Greet three times
+trigger('greet', 'Akshita');
+trigger('greet', 'Rahul');
+trigger('greet', 'Priya');
 
-// Emit greet three times
-session.trigger('greet', 'Akshita');
-session.trigger('greet', 'Rahul');
-session.trigger('greet', 'Priya');
+// Listener count
+console.log("Greet listener count:", session.listenerCount('greet'));
 
-// Print current listener count for greet
-console.log(`Greet listener count: ${session.listenerCount('greet')}`);
-
-// Emit exit
-session.trigger('exit', 0);
+// Exit
+trigger('exit', 0);
 
 // Unknown event
-session.trigger('login');
+trigger('login');
 
-// Emit error event
+// Error event
 session.emit('error', 'Invalid session detected.');

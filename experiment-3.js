@@ -15,7 +15,7 @@ let PORT = 2000;
         if (path === '/' && req.method === 'GET') {
          res.statusCode = 200;
          res.setHeader('Content-Type', 'text/plain');
-         res.end('Welcome! Try /greet?name=Anahita or /headers or POST to /data');
+         res.end('Welcome! Try /greet?name=Akshita or /headers or POST to /data');
              }
 //     // ROUTE 2: Query parameters
      else if (path === '/greet' && req.method === 'GET') {
